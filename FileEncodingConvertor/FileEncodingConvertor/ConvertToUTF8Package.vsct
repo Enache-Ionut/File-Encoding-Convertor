@@ -31,14 +31,25 @@
     group; your package should define its own command set in order to avoid collisions
     with command ids defined by other packages. -->
 
+
+    <Menus>
+
+      <Menu guid="guidConvertToUTF8PackageCmdSet" id="Menu" priority="0x0000" type="Menu">
+        <Strings>
+          <ButtonText>Convert to...</ButtonText>
+        </Strings>
+      </Menu>
+      
+    </Menus>
+    
+    
     <!-- In this section you can define new menu groups. A menu group is a container for
          other menus or buttons (commands); from a visual point of view you can see the
          group as the part of a menu contained between two lines. The parent of a group
          must be a menu. -->
     <Groups>
-      <Group guid="guidConvertToUTF8PackageCmdSet" id="MyMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE"/>
-      </Group>
+      <Group guid="guidConvertToUTF8PackageCmdSet" id="MenuGroup" priority="0x0000" />
+      <Group guid="guidConvertToUTF8PackageCmdSet" id="CommandsGroup" priority="0x0001" />
     </Groups>
 
     <!--Buttons section. -->
@@ -52,8 +63,8 @@
               <CommandFlag>DefaultInvisible</CommandFlag>
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node /> -->
-      <Button guid="guidConvertToUTF8PackageCmdSet" id="ConvertToUTF8Id" priority="0x0100" type="Button">
-        <Parent guid="guidConvertToUTF8PackageCmdSet" id="MyMenuGroup" />
+      <Button guid="guidConvertToUTF8PackageCmdSet" id="ConvertToUTF8" priority="0x0100" type="Button">
+        <!--<Parent guid="guidConvertToUTF8PackageCmdSet" id="MenuGroup" />-->
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
           <ButtonText>UTF-8</ButtonText>
@@ -71,6 +82,28 @@
       <Bitmap guid="guidImages" href="Resources\ConvertToUTF8.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
     </Bitmaps>
   </Commands>
+
+  <CommandPlacements>
+    
+    <CommandPlacement guid="guidConvertToUTF8PackageCmdSet" id="MenuGroup" priority="0x0600">
+      <!-- The parent of the group will be the project context menu -->
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+    </CommandPlacement>
+
+    <CommandPlacement guid="guidConvertToUTF8PackageCmdSet" id="Menu" priority="0x0000">
+      <Parent guid="guidConvertToUTF8PackageCmdSet" id="MenuGroup" />
+    </CommandPlacement>
+
+    <CommandPlacement guid="guidConvertToUTF8PackageCmdSet" id="CommandsGroup" priority="0x0001">
+      <Parent guid="guidConvertToUTF8PackageCmdSet" id="Menu" />
+    </CommandPlacement>
+    
+    <!--Add the commands in GroupForCommands -->
+    <CommandPlacement guid="guidConvertToUTF8PackageCmdSet" id="ConvertToUTF8" priority="0x0000">
+      <Parent guid="guidConvertToUTF8PackageCmdSet" id="CommandsGroup" />
+    </CommandPlacement>
+    
+  </CommandPlacements>
   
   <Symbols>
     <!-- This is the package guid. -->
@@ -78,8 +111,16 @@
 
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidConvertToUTF8PackageCmdSet" value="{649bac70-70e9-40dd-9ffc-cb1877601e22}">
-      <IDSymbol name="MyMenuGroup" value="0x1020" />
-      <IDSymbol name="ConvertToUTF8Id" value="0x0100" />
+      
+      <!--Menu-->
+      <IDSymbol name="Menu" value="0x1000"/>
+      
+      <!--Groups-->
+      <IDSymbol name="MenuGroup" value="0x1020" />
+      <IDSymbol name="CommandsGroup" value="0x1030" />
+      
+      <!--Commands-->
+      <IDSymbol name="ConvertToUTF8" value="0x0100" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{f5f06160-7f8b-4c47-92b7-35b86b00d981}" >
