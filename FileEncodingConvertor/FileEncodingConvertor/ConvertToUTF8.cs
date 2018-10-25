@@ -1,8 +1,13 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using EnvDTE;
+using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
@@ -12,7 +17,7 @@ namespace FileEncodingConvertor
   /// <summary>
   /// Command handler
   /// </summary>
-  internal sealed class ConvertToUTF8
+  internal sealed class ConvertToUTF8 : BasicCommand
   {
     /// <summary>
     /// Command ID.
@@ -88,18 +93,18 @@ namespace FileEncodingConvertor
     /// <param name="e">Event args.</param>
     private void Execute(object sender, EventArgs e)
     {
-      ThreadHelper.ThrowIfNotOnUIThread();
-      string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-      string title = "ConvertToUTF8";
+      var selectedItems = GetSelectedFiles();
 
-      // Show a message box to prove we were here
-      VsShellUtilities.ShowMessageBox(
-          this.package,
-          message,
-          title,
-          OLEMSGICON.OLEMSGICON_INFO,
-          OLEMSGBUTTON.OLEMSGBUTTON_OK,
-          OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+      if (!VsServiceProvider.TryGetService(typeof(DTE), out object dte))
+        return;
+
+      var dte2 = dte as DTE2;
+      foreach(var item in selectedItems)
+      {
+        var fileContent = File.ReadAllText(item);
+        File.WriteAllText(item, fileContent, Encoding.UTF8);
+      }
+
     }
   }
 }
