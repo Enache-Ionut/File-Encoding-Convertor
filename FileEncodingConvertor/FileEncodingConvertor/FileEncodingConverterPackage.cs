@@ -37,9 +37,9 @@ namespace FileEncodingConvertor
   [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
   [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
   [ProvideMenuResource("Menus.ctmenu", 1)]
-  [Guid(ConvertToUTF8Package.PackageGuidString)]
+  [Guid(FileEncodingConverterPackage.PackageGuidString)]
   [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-  public sealed class ConvertToUTF8Package : AsyncPackage
+  public sealed class FileEncodingConverterPackage : AsyncPackage
   {
     /// <summary>
     /// ConvertToUTF8Package GUID string.
@@ -47,9 +47,9 @@ namespace FileEncodingConvertor
     public const string PackageGuidString = "64ae5d04-c4b5-4f98-b3c0-ceb886279526";
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ConvertToUTF8Package"/> class.
+    /// Initializes a new instance of the <see cref="FileEncodingConverterPackage"/> class.
     /// </summary>
-    public ConvertToUTF8Package()
+    public FileEncodingConverterPackage()
     {
       // Inside this method you can place any initialization code that does not require
       // any Visual Studio service because at this point the package object is created but
