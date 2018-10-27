@@ -55,7 +55,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BasicCommand.cs" />
+    <Compile Include="CommandsController.cs" />
     <Compile Include="ConvertToUTF8.cs" />
+    <Compile Include="ExtensionConstants.cs" />
     <Compile Include="FileEncodingConverterPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VsServiceProvider.cs" />
