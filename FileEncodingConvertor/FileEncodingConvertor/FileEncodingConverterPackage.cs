@@ -1,18 +1,11 @@
-﻿using System;
+﻿using EnvDTE;
+using EnvDTE80;
+using Microsoft.VisualStudio.Shell;
+using System;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
-using EnvDTE;
-using EnvDTE80;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Win32;
 using Task = System.Threading.Tasks.Task;
 
 namespace FileEncodingConvertor
@@ -41,10 +34,22 @@ namespace FileEncodingConvertor
   [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
   public sealed class FileEncodingConverterPackage : AsyncPackage
   {
+    #region Members
+
     /// <summary>
     /// ConvertToUTF8Package GUID string.
     /// </summary>
     public const string PackageGuidString = "64ae5d04-c4b5-4f98-b3c0-ceb886279526";
+
+
+    private CommandsController mCommandsController = new CommandsController();
+
+
+    #endregion
+
+
+    #region Constructor
+
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FileEncodingConverterPackage"/> class.
@@ -57,7 +62,11 @@ namespace FileEncodingConvertor
       // initialization is the Initialize method.
     }
 
+    #endregion
+
+
     #region Package Members
+
 
     /// <summary>
     /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -70,12 +79,22 @@ namespace FileEncodingConvertor
     {
       // When initialized asynchronously, the current thread may be a background thread at this point.
       // Do any initialization that requires the UI thread after switching to the UI thread.
-      await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+      await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
       var dte = await GetServiceAsync(typeof(DTE)) as DTE2;
       VsServiceProvider.Register(typeof(DTE), dte);
 
-      await ConvertToUTF8.InitializeAsync(this);
+      var commandService = await GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
+      VsServiceProvider.Register(typeof(IMenuCommandService), commandService);
+
+
+      if (null != commandService)
+      {
+        var menuCommandID = new CommandID(ExtensionConstants.CommandSet, ExtensionConstants.UTF8_ID);
+        var menuItem = new MenuCommand(mCommandsController.ChooseCommand, menuCommandID);
+        commandService.AddCommand(menuItem);
+      }
+
     }
 
     #endregion
